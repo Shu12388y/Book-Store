@@ -17,12 +17,14 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
   })
 );
-app.use(express.json());
+
+app.use(express.json({limit:"18kb"}));
+app.use(express.urlencoded({extended:true,limit:'16kb'}));
 app.use(cookieParser());
 
 app.use(router);
@@ -31,6 +33,7 @@ app.use(getBooksRoute);
 app.use(singleBookRoute);
 app.use(updateBookRoute);
 app.use(deleteBookRoute);
+
 dbconnect()
   .then(() => {
     app.listen(process.env.PORT, () => {
